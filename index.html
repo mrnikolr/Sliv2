@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SonyLiv Live Match</title>
+  <link rel="shortcut icon" href="favicon.ico">
+  <script disable-devtool-auto src='https://cdn.jsdelivr.net/npm/disable-devtool'></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF6B00;
+      --secondary: #000;      /* Pure black background */
+      --accent: #00C2FF;
+      --text: #F8F8F8;
+      --card-bg: #111;        /* Very dark for cards */
+      --muted: #A1A1AA;
+    }
+
+    body {
+      font-family: 'Open Sans', 'Segoe UI', system-ui, sans-serif;
+      background-color: var(--secondary);
+      color: var(--text);
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .header {
+      font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif !important;
+      color: #fff !important;
+      font-size: 2.7rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      background: none;
+      -webkit-background-clip: unset;
+      -webkit-text-fill-color: unset;
+      text-shadow: none;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 400;
+    }
+
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .match-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(30,30,36,0.10);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: none !important; /* No border */
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .match-card:hover {
+      box-shadow: 0 8px 24px rgba(30,30,36,0.18);
+      transform: translateY(-3px) scale(1.01);
+    }
+
+    .match-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      transition: transform 0.4s;
+    }
+
+    .match-card:hover .match-img {
+      transform: scale(1.03);
+    }
+
+    .live-badge {
+      background: var(--primary);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      box-shadow: 0 2px 8px rgba(255,107,0,0.15);
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      letter-spacing: 1px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .watch-btn, .adfree-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 0.5rem;
+      transition: background 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 2px 8px rgba(255,107,0,0.10);
+    }
+
+    .watch-btn:hover, .adfree-btn:hover {
+      background: #ff8c42;
+      box-shadow: 0 4px 16px rgba(255,107,0,0.18);
+    }
+
+    .adfree-btn {
+      background: #3535a8;
+    }
+
+    .adfree-btn:hover {
+      background: #5050d6;
+    }
+
+    .upcoming-tag {
+      background: #353554;
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      text-align: center;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .countdown {
+      color: var(--primary);
+      background: #fff1e6;
+      border-radius: 6px;
+      padding: 0.25rem 0.7rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+      display: inline-block;
+    }
+
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+      color: var(--muted);
+      margin: 1rem auto 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 107, 0, 0.12);
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 3rem;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .header { font-size: 2rem; }
+      .match-card { padding: 1rem; }
+      .match-img { height: 120px; }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="text-center mb-10">
+      <div class="floating inline-block mb-6">
+        <img src="Sony_LIV.webp" alt="SLiv Logo" class="w-28 h-28 shadow-lg">
+      </div>
+      <h1 class="header">SONYLIV LIVE MATCHES</h1>
+      <p class="subtitle">Watch all your favorite sports events live in high quality streams by Nikhil</p>
+      <button class="theme-toggle w-12 h-12 rounded-full text-xl">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+    <!-- Matches Grid -->
+    <div id="matches-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Matches will be loaded here -->
+    </div>
+    <!-- Footer -->
+    <div class="footer mt-16">
+      <p>© 2025 Sonyliv Live Matches </p>
+      <p class="mt-2">All streams are sourced from official broadcasters</p>
+    </div>
+  </div>
+
+  <script>
+    // Theme Toggle
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-theme');
+      const icon = themeToggle.querySelector('i');
+      if (document.body.classList.contains('light-theme')) {
+        icon.classList.replace('fa-moon', 'fa-sun');
+        document.documentElement.style.setProperty('--primary', '#FF8C00');
+        document.documentElement.style.setProperty('--secondary', '#F5F5F5');
+        document.documentElement.style.setProperty('--text', '#333333');
+        document.documentElement.style.setProperty('--card-bg', '#FFFFFF');
+        document.documentElement.style.setProperty('--muted', '#555');
+      } else {
+        icon.classList.replace('fa-sun', 'fa-moon');
+        document.documentElement.style.setProperty('--primary', '#FF6B00');
+        document.documentElement.style.setProperty('--secondary', '#000');
+        document.documentElement.style.setProperty('--text', '#F8F8F8');
+        document.documentElement.style.setProperty('--card-bg', '#111');
+        document.documentElement.style.setProperty('--muted', '#A1A1AA');
+      }
+    });
+
+    // Load Matches
+    const container = document.getElementById('matches-container');
+    container.innerHTML = `
+      <div class="col-span-3 flex justify-center">
+        <div class="animate-pulse text-gray-500 flex items-center">
+          <i class="fas fa-circle-notch fa-spin mr-2"></i> Loading matches...
+        </div>
+      </div>
+    `;
+    fetch('https://raw.githubusercontent.com/drmlive/sliv-live-events/refs/heads/main/sonyliv.json')
+      .then(response => response.json())
+      .then(data => {
+        container.innerHTML = '';
+        if (!data.matches || data.matches.length === 0) {
+          container.innerHTML = `
+            <div class="col-span-3 text-center py-10">
+              <div class="inline-block bg-gray-800/50 p-6 rounded-xl">
+                <i class="fas fa-tv text-4xl text-gray-600 mb-4"></i>
+                <h3 class="text-xl font-semibold">No matches available</h3>
+                <p class="text-gray-500 mt-2">Check back later for upcoming events</p>
+              </div>
+            </div>
+          `;
+          return;
+        }
+        data.matches.forEach(match => {
+          const isLive = match.status === 'LIVE';
+          const hasStreams = match.dai_url && match.adfree_url;
+          // Format start time
+          const startTime = new Date(match.startTime);
+          const options = {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short',
+            hour: '2-digit',
+            minute: '2-digit'
+          };
+          const formattedTime = startTime.toLocaleDateString('en-US', options);
+          // Calculate countdown if upcoming
+          let countdown = '';
+          if (!isLive && !hasStreams) {
+            const now = new Date();
+            const diff = startTime - now;
+            if (diff > 0) {
+              const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+              const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+              const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+              countdown = `Starts in ${days}d ${hours}h ${mins}m`;
+            } else {
+              countdown = 'Starting soon';
+            }
+          }
+          const card = document.createElement('div');
+          card.className = `match-card`;
+          card.innerHTML = `
+            <div class="relative overflow-hidden">
+              <img src="${match.src || 'https://via.placeholder.com/400x200?text=No+Image'}" 
+                   alt="${match.event_name}" 
+                   class="match-img">
+              ${isLive ? `
+                <div class="live-badge">
+                  <i class="fas fa-circle mr-1"></i> Live Now
+                </div>
+              ` : ''}
+              <div class="absolute bottom-0 left-0 right-0 p-4" style="background: linear-gradient(0deg, rgba(30,30,36,0.88) 60%, rgba(42,42,64,0.0) 100%);">
+                <h3 class="text-xl font-bold" style="color: var(--primary);">${match.event_name}</h3>
+                <p class="text-sm" style="color: var(--muted);">${match.match_name}</p>
+              </div>
+            </div>
+            <div class="p-2 mt-2">
+              <div class="flex justify-between items-center mb-3">
+                <div class="text-sm" style="color: var(--muted);">
+                  <i class="far fa-clock mr-1"></i> ${formattedTime}
+                </div>
+                ${countdown ? `
+                  <div class="countdown">${countdown}</div>
+                ` : ''}
+              </div>
+              ${hasStreams ? `
+                <div class="flex flex-col sm:flex-row gap-3">
+                  <a href="https://web.bgrid.in/hls/?url=${match.dai_url}" 
+                     class="watch-btn flex-1">
+                    <i class="fas fa-play"></i> Watch Stream
+                  </a>
+                  <a href="https://playj.netlify.app/?id=${match.adfree_url}" 
+                     class="adfree-btn flex-1">
+                    <i class="fas fa-crown"></i> Ad-Free
+                  </a>
+                </div>
+              ` : `
+                <div class="upcoming-tag">
+                  <i class="fas fa-calendar-alt mr-2"></i> Upcoming Match
+                </div>
+              `}
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching matches:', error);
+        container.innerHTML = `
+          <div class="col-span-3 text-center py-10">
+            <div class="inline-block bg-red-900/20 p-6 rounded-xl border border-red-900/30">
+              <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+              <h3 class="text-xl font-semibold">Failed to load matches</h3>
+              <p class="text-gray-500 mt-2">Please try again later</p>
+              <button onclick="window.location.reload()" 
+                      class="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg text-sm font-medium transition">
+                <i class="fas fa-sync-alt mr-2"></i> Reload
+              </button>
+            </div>
+          </div>
+        `;
+      });
+  </script>
+</body>
+</html>
